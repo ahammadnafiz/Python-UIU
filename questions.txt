@@ -1,0 +1,27 @@
+{
+    "questions": [
+        "What is the capital of France?",
+        "Which planet is known as the 'Red Planet'?",
+        "What is the largest mammal in the world?",
+        "Who wrote the play 'Romeo and Juliet'?",
+        "What is the chemical symbol for gold?",
+        "In what year did the first moon landing occur?",
+        "Which element has the atomic number 79?",
+        "What is the largest ocean on Earth?",
+        "Who is known as the 'Father of Computer Science'?",
+        "What is the powerhouse of the cell?"
+    ],
+    "options": [
+        ["a) London", "b) Berlin", "c) Paris", "d) Rome"],
+        ["a) Venus", "b) Mars", "c) Jupiter", "d) Saturn"],
+        ["a) Elephant", "b) Blue Whale", "c) Giraffe", "d) Hippopotamus"],
+        ["a) Charles Dickens", "b) William Shakespeare", "c) Jane Austen", "d) Mark Twain"],
+        ["a) Au", "b) Ag", "c) Fe", "d) Cu"],
+        ["a) 1969", "b) 1975", "c) 1982", "d) 1990"],
+        ["a) Silver", "b) Gold", "c) Platinum", "d) Mercury"],
+        ["a) Indian Ocean", "b) Atlantic Ocean", "c) Southern Ocean", "d) Pacific Ocean"],
+        ["a) Alan Turing", "b) Bill Gates", "c) Steve Jobs", "d) Mark Zuckerberg"],
+        ["a) Nucleus", "b) Ribosome", "c) Mitochondrion", "d) Endoplasmic Reticulum"]
+    ],
+    "answers": ["c", "b", "b", "b", "a", "a", "b", "d", "a", "c"]
+}
