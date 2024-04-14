@@ -16,16 +16,18 @@ This repository houses exercises and learning materials for the UIU Data Science
 To get started with Python-UIU, follow these steps:
 
 1. Clone the repository to your local machine using:
+
    ```
    git clone https://github.com/your-username/Python-UIU.git
    ```
-2. Navigate to the project directory:
+3. Navigate to the project directory:
+
    ```
    cd Python-UIU
    ```
-3. Explore the exercises and learning materials available in the repository.
-4. Begin with the introductory materials if you're new to Python, or jump straight into the exercises if you're looking for hands-on practice.
-5. Join the community discussions on GitHub to ask questions, share insights, and connect with fellow learners.
+5. Explore the exercises and learning materials available in the repository.
+6. Begin with the introductory materials if you're new to Python, or jump straight into the exercises if you're looking for hands-on practice.
+7. Join the community discussions on GitHub to ask questions, share insights, and connect with fellow learners.
 
 ## Contributing
 
