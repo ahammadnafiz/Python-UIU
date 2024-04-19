@@ -13,7 +13,7 @@ def add_item():
 
 def delete_item():
     listbox.delete(listbox.curselection())
-    #for index in reversed(listbox.curselection()):     If MULTIPLE selectmode is unable
+    #for index in reversed(listbox.curselection()):     If MULTIPLE selectmode is on
         #listbox.delete(index)
     listbox.config(height=listbox.size())
 
