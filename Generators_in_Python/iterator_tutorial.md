@@ -199,7 +199,7 @@ Output:
 In this example, we created an instance of `FibonacciIterator` with `max_terms=10`. When we iterate over the `fib_iterator` object using a `for` loop, Python automatically calls the `__iter__()` method to get the iterator object, and then uses the `__next__()` method to retrieve the Fibonacci numbers one by one.
 
 
-## Step 6: Iterating Over Built-in Data Structures (continued)
+## Step 6: Iterating Over Built-in Data Structures
 
 ```python
 # Iterating over a tuple
