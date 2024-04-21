@@ -12,10 +12,11 @@ for i in num:
 '''
 An Iterator is an object that allows the programmer to traverse through a
 sequence of data without having to store the entire data in memory
+With the help of Iterator, Iteration procced
 '''
 
 # Example
-#my_list = [i for i in range(1,100000000)]   # In this Example it first create a list and save it to memory
+my_list = [i for i in range(1,100000000)]   # In this Example it first create a list and save it to memory
 
 # Suppose we want to multiply all the item by 2
 
@@ -26,11 +27,12 @@ for i in my_list:   # that's not memory efficient
 
 # If we get the size of the list
 import sys
-#print(sys.getsizeof(my_list)/1024)  # That was 815555 kb
+print(sys.getsizeof(my_list)/1024)  # That was 815555 kb
+
 
 # Same thing but different way
-#x = range(1,100000000)
-#print(sys.getsizeof(x)/1024)    # 0.046875kb
+x = range(1,100000000)
+print(sys.getsizeof(x)/1024)    # 0.046875kb
 
 # That was the difference, the Iterator object doesn't store the item in the memory, ratherthan it perform task one by one
 
@@ -45,13 +47,11 @@ In simple word, if we perform loop on that object it's Iterable
 # Example
 
 L = [1, 2, 3, 4]
-#print(type(L))              # L --> is an Iterable object
-
-#print(iter(L))              # iter(L) --> Iterator
+print(type(L))              # L --> is an Iterable object
+print(iter(L))              # iter(L) --> Iterator
 
 
 # Points to remember
-
 '''
 Every Iterator is also an Iterables
 Not all Iterables are Iterators
@@ -62,10 +62,9 @@ Like we saw the previous Example's where we create list that's an Iterable objec
 '''
 
 # Tricks
-
 '''
-Every Iterable has an iter function
-Every Iterator has both iter function as well as a next function
+Every Iterable has an __iter__() function
+Every Iterator has both __iter__() function as well as a __next__() function
 '''
 
 # Example
@@ -73,10 +72,10 @@ a = 2
 
 # If we pass to dir function we can see there is no iter function, cz it's not an Iterable object
 
-#print(dir(a))
+print(dir(a))
 
 my_tuple = (1, 2, 3)
-#print(dir(my_tuple))    # It have __iter__ function but no __next__ function because it's not an Iterator
+print(dir(my_tuple))    # It have __iter__ function but no __next__ function because it's not an Iterator
 
 # But we can convert any Iterable object which is not Iterator by passing it to iter() function
 
@@ -101,7 +100,6 @@ print(next(iter_num))   # Output: 5
 
 
 # Making our own for loop
-
 def our_for_loop(iterable):
     # Step 1 -->  Fetch iterable
     iterator = iter(iterable)
@@ -147,7 +145,6 @@ class OurRangeIterator:
         return current
 
 # Create an object
-
 z = OurRangeIterable(2, 10)
 for i in z:
     print(i)
