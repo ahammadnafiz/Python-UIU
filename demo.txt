@@ -1,4 +1,4 @@
-Ahammad Nafiz, 349284
-nafiz,4892
-ahfs, 9392
-fjsk,094909
+Abul,26,Dhaka,10000
+Babul,45,Dhaka,16000
+Karim,46,Chittagong,17266
+Nafiz,21,Bhola,140000
