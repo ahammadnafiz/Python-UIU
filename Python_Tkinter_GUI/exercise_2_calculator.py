@@ -35,14 +35,14 @@ class Calculator(Tk):
             try:
                 result = str(eval(self.entry.get()))
                 self.entry.delete(0, END)
-                self.entry.insert(0, result)
+                self.entry.insert(END, result)
             except:
                 self.entry.delete(0, END)
-                self.entry.insert(0, 'Error')
+                self.entry.insert(END, 'Error')
         else:
             current = self.entry.get()
             self.entry.delete(0, END)
-            self.entry.insert(0, f"{current}{text}")
+            self.entry.insert(END, f"{current}{text}")
 
 if __name__ == '__main__':
     window = Calculator()
