@@ -18,7 +18,7 @@ To get started with Python-UIU, follow these steps:
 1. Clone the repository to your local machine using:
 
    ```
-   git clone https://github.com/your-username/Python-UIU.git
+   https://github.com/ahammadnafiz/Python-UIU.git
    ```
 3. Navigate to the project directory:
 
