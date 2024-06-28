@@ -32,8 +32,12 @@ class ShoppingCart:
         print(f"Added {quantity} {product.name}(s) to cart")
 
     def remove_item(self, product):
-        self.items = [item for item in self.items if item.product.name != product.name]
-        print(f"Removed {product.name} from cart")
+        for item in self.items:
+            if item.product.name == product.name:
+                self.items.remove(item)
+                print(f"Removed {product.name} from cart")
+                return
+        print(f"{product.name} not found in cart")
 
     def update_item_quantity(self, product, new_quantity):
         for item in self.items:
