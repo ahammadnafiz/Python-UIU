@@ -17,13 +17,17 @@ class ShoppingCart:
         self.items = {}  # dictionary to hold product objects and quantities
     
     def add_item(self, product, quantity):
+        if product.stock < quantity:
+            raise ValueError(f"Not enough stock for {product.name}")
         if product in self.items:
             self.items[product] += quantity
         else:
             self.items[product] = quantity
+        product.update_stock(-quantity)
     
     def remove_item(self, product):
         if product in self.items:
+            product.update_stock(self.items[product])
             del self.items[product]
     
     def get_total(self):
