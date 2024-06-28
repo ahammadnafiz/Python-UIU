@@ -18,7 +18,7 @@ class ShoppingCart:
     
     def add_item(self, product, quantity):
         if product.stock < quantity:
-            raise ValueError(f"Not enough stock for {product.name}")
+            print(f"Not enough stock for {product.name}")
         if product in self.items:
             self.items[product] += quantity
         else:
