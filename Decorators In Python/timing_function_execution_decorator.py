@@ -15,5 +15,3 @@ def example_function(n):
 
 #example_function = timer(example_function)
 example_function(2)
-
-
