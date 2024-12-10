@@ -177,28 +177,6 @@ class LinkedList:
             current = current.next
         return count
 
-    def search_occurrence(self, value):
-        if not self.head:
-            print("List is empty")
-            return
-        
-        traveller = self.head
-        cnt = 0  # index
-        occ = 0  # occurrences
-        indices = []
-        
-        while traveller:
-            if traveller.value == value:
-                indices.append(cnt)
-                occ += 1
-            cnt += 1
-            traveller = traveller.next
-        
-        # Print indices of occurrences
-        print("Indices:", " ".join(map(str, indices)) if indices else "No occurrences found")
-        
-        # Print total occurrences
-
     # TRANSFORMATION METHODS
     def reverse(self):
         """Reverse the linked list"""
