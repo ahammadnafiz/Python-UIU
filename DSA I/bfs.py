@@ -1,7 +1,7 @@
 import numpy as np 
 from collections import deque
 
-vertices = ['A', 'B', 'C', 'D', 'E', 'F']
+vertices = ['R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
 n = len(vertices)
 adj_matrix = np.zeros((n, n), dtype=int)
 print("Initial Adjacency Matrix:\n", adj_matrix)
@@ -12,13 +12,20 @@ print("Vertex to Index Mapping:", vertex_to_index)
 
 # define the edges (only need to define one direction since it's undirected)
 edges = [
-    ('A', 'B'),
-    ('A', 'C'),
-    ('B', 'C'),
-    ('B', 'D'),
-    ('C', 'F'),
-    ('D', 'E'),
-    ('E', 'F')
+    ('R', 'S'),
+    ('R', 'V'),
+    ('S', 'W'),
+    ('W', 'T'),
+    ('W', 'X'),
+    ('T', 'X'),
+    ('T', 'W'),
+    ('T', 'U'),
+    ('X', 'W'),
+    ('X', 'T'),
+    ('X', 'Y'),
+    ('Y', 'X'),
+    ('Y', 'U')
+
 ]
 
 # Create adjacency matrix (undirected)
@@ -67,7 +74,7 @@ def bfs(adj_matrix, start_vertex, vertex_to_index):
     return bfs_order
 
 # Example usage
-start_vertex = 'A'
+start_vertex = 'S'
 print(f"\nPerforming BFS starting from vertex '{start_vertex}':")
 bfs_result = bfs(adj_matrix, start_vertex, vertex_to_index)
 print("\nBFS Traversal Order:", bfs_result)
