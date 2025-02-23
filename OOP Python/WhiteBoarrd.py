@@ -22,8 +22,9 @@ WhiteboardApp - A class that represents the whiteboard application.
 
 """
 
-import customtkinter as ctk
 from tkinter.colorchooser import askcolor
+
+import customtkinter as ctk
 
 
 class WhiteboardApp:
@@ -85,20 +86,60 @@ class WhiteboardApp:
         controls_frame = ctk.CTkFrame(self.root)
         controls_frame.pack(side="top", fill="x", padx=20, pady=10)
 
-        self.color_button = ctk.CTkButton(controls_frame, text="Change Color", command=self.change_pen_color, width=120, height=40, font=("Arial", 12), corner_radius=8)
-        self.clear_button = ctk.CTkButton(controls_frame, text="Clear Canvas", command=self.clear_canvas, width=120, height=40, font=("Arial", 12), corner_radius=8)
-        self.pen_button = ctk.CTkButton(controls_frame, text="Pen (P)", command=self.toggle_pen, width=120, height=40, font=("Arial", 12), corner_radius=8)
-        self.eraser_button = ctk.CTkButton(controls_frame, text="Eraser (E)", command=self.toggle_eraser, width=120, height=40, font=("Arial", 12), corner_radius=8)
+        self.color_button = ctk.CTkButton(
+            controls_frame,
+            text="Change Color",
+            command=self.change_pen_color,
+            width=120,
+            height=40,
+            font=("Arial", 12),
+            corner_radius=8,
+        )
+        self.clear_button = ctk.CTkButton(
+            controls_frame,
+            text="Clear Canvas",
+            command=self.clear_canvas,
+            width=120,
+            height=40,
+            font=("Arial", 12),
+            corner_radius=8,
+        )
+        self.pen_button = ctk.CTkButton(
+            controls_frame,
+            text="Pen (P)",
+            command=self.toggle_pen,
+            width=120,
+            height=40,
+            font=("Arial", 12),
+            corner_radius=8,
+        )
+        self.eraser_button = ctk.CTkButton(
+            controls_frame,
+            text="Eraser (E)",
+            command=self.toggle_eraser,
+            width=120,
+            height=40,
+            font=("Arial", 12),
+            corner_radius=8,
+        )
 
         self.color_button.grid(row=0, column=0, padx=10, pady=10)
         self.clear_button.grid(row=0, column=1, padx=10, pady=10)
         self.pen_button.grid(row=0, column=2, padx=10, pady=10)
         self.eraser_button.grid(row=0, column=3, padx=10, pady=10)
 
-        line_width_label = ctk.CTkLabel(controls_frame, text="Line Width:", font=("Arial", 12))
+        line_width_label = ctk.CTkLabel(
+            controls_frame, text="Line Width:", font=("Arial", 12)
+        )
         line_width_label.grid(row=0, column=4, padx=10, pady=10)
 
-        self.line_width_slider = ctk.CTkSlider(controls_frame, from_=1, to=10, command=self.change_line_width, progress_color="#FF6347")
+        self.line_width_slider = ctk.CTkSlider(
+            controls_frame,
+            from_=1,
+            to=10,
+            command=self.change_line_width,
+            progress_color="#FF6347",
+        )
         self.line_width_slider.set(self.line_width)
         self.line_width_slider.grid(row=0, column=5, padx=10, pady=10)
 
@@ -138,9 +179,27 @@ class WhiteboardApp:
         if self.is_drawing:
             current_x, current_y = event.x, event.y
             if self.eraser_mode:
-                self.canvas.create_line(self.prev_x, self.prev_y, current_x, current_y, fill="white", width=self.line_width, capstyle=ctk.ROUND, smooth=True)
+                self.canvas.create_line(
+                    self.prev_x,
+                    self.prev_y,
+                    current_x,
+                    current_y,
+                    fill="white",
+                    width=self.line_width,
+                    capstyle=ctk.ROUND,
+                    smooth=True,
+                )
             else:
-                self.canvas.create_line(self.prev_x, self.prev_y, current_x, current_y, fill=self.drawing_color, width=self.line_width, capstyle=ctk.ROUND, smooth=True)
+                self.canvas.create_line(
+                    self.prev_x,
+                    self.prev_y,
+                    current_x,
+                    current_y,
+                    fill=self.drawing_color,
+                    width=self.line_width,
+                    capstyle=ctk.ROUND,
+                    smooth=True,
+                )
             self.prev_x, self.prev_y = current_x, current_y
 
     def stop_drawing(self, event):
@@ -191,9 +250,9 @@ class WhiteboardApp:
 
     def toggle_eraser(self, event=None):
         """
-        Function: 
+        Function:
         toggle_eraser
-        
+
         Description: Toggles between pen and eraser mode.
 
         Parameters:
@@ -202,23 +261,23 @@ class WhiteboardApp:
 
         """
         self.eraser_mode = not self.eraser_mode
-        
+
     def toggle_pen(self, event=None):
         """
-    Toggle between pen and eraser mode.
+        Toggle between pen and eraser mode.
 
-    Parameters
-    ----------
-    event : Event, optional
-        The event that triggered the function call.
-        This parameter is only used to determine the key that was pressed.
-        By default, this parameter is set to None.
+        Parameters
+        ----------
+        event : Event, optional
+            The event that triggered the function call.
+            This parameter is only used to determine the key that was pressed.
+            By default, this parameter is set to None.
 
-    Returns
-    -------
-    None
+        Returns
+        -------
+        None
 
-    """
+        """
         self.eraser_mode = not self.eraser_mode
 
 
