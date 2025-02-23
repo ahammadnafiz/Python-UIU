@@ -1,78 +1,42 @@
-class Stack:
-    def __init__(self, capacity=None):
-        self._items = [] # Initialize an empty Stack
-        self.capacity = capacity
+import numpy as np
 
-    def push(self, item):
-        if self.capacity and len(self._items) >= self.capacity:
-            raise StackOverflowError("Stack is at capacity")
+# Define vertices and initialize adjacency matrix
+vertices = [1, 2, 3, 4, 5]
+n = len(vertices)
+adj_matrix = np.zeros((n, n), dtype=int)
+print("Initial Adjacency Matrix:\n", adj_matrix)
 
-        self._items.append(item)
+# Map each vertex to an index
+vertex_to_index = {vertex: idx for idx, vertex in enumerate(vertices)}
+print("Vertex to Index Mapping:", vertex_to_index)
 
-    def pop(self):
-        if self.is_empty():
-            raise StackUnderflowError("Stack is empty")
-        return self._items.pop()
+# Define the edges (no need to repeat undirected edges)
+edges = [
+    (1, 2),
+    (1, 4),
+    (2, 3),
+    (2, 4),
+    (3, 4),
+    (3, 5),
+    (4, 5)
+]
 
-    def peek(self):
-        if self.is_empty():
-            raise StackUnderflowError("Stack is empty")
-        return self._items[-1]
+# Create adjacency matrix
+for edge in edges:
+    i, j = vertex_to_index[edge[0]], vertex_to_index[edge[1]]
+    adj_matrix[i][j] = 1
+    adj_matrix[j][i] = 1  # Since the graph is undirected
 
-    def is_empty(self):
-        return len(self._items) == 0
+print("Adjacency Matrix after adding edges:\n", adj_matrix)
 
-    def is_full(self):
-        return self.capacity is not None and len(self._items) >= self.capacity
+# Create adjacency list
+adj_list = {vertex: [] for vertex in vertices}
+for edge in edges:
+    # Add each edge only once for an undirected graph
+    adj_list[edge[0]].append(edge[1])
+    adj_list[edge[1]].append(edge[0])
 
-    def size(self):
-        return len(self._items)
-
-    def clear(self):
-        self._items = []
-
-    def to_list(self):
-        return self._items.copy()
-
-    def __str__(self):
-        return f"Stack({self._items})"
-
-    def __len__(self):
-        return len(self._items)
-
-    def __contains__(self, item):
-        return item in self._items
-
-    def __getitem__(self, index):
-        if index < 0 or index >= len(self._items):
-            raise IndexError("Index out of range")
-        return self._items[index]
-
-class StackOverflowError(Exception):
-    pass
-
-class StackUnderflowError(Exception):
-    pass
-
-
-def match_pairs(pairs):
-    left = '([{'
-    right = ')]}'
-    stack = Stack()
-    
-    for char in pairs:
-        if char in left:
-            stack.push(char)
-        elif char in right:
-            if stack.is_empty():
-                return False
-
-            right_index = right.index(char)
-            matching_left = left[right_index]
-
-            if stack.pop() != matching_left:
-                return False
-
-    return stack.is_empty()
-
-print(match_pairs("[(])"))
+# Print adjacency list
+print("\nAdjacency List:")
+for vertex, neighbors in sorted(adj_list.items()):
+    print(f"{vertex}: {neighbors}")
