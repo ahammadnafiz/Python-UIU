@@ -95,12 +95,16 @@ class JSONPlaceholderClient:
             return cached_data
         
         # Make the request
-        response = self.session.get(url, params=query_params)
-        response.raise_for_status()
-        data = response.json()
-
-        self._save_to_cache(cache_path, data)
-        return data
+        try:
+            response = self.session.get(url, params=query_params)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP error: {e}")
+            return None
+        else:
+            data = response.json()
+            self._save_to_cache(cache_path, data)
+            return data
     
     def create_resource(self, resource: str, data: Dict) -> Dict:
         """
