@@ -25,6 +25,8 @@ from selenium.common.exceptions import (
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webelement import WebElement
+import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -112,6 +114,7 @@ class MegaScraper:
         # Initialize the WebDriver
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=options)
+        # self.driver = uc.Chrome(options=options)
         
         # Set window size to a common resolution
         self.driver.set_window_size(1920, 1080)
@@ -814,49 +817,95 @@ class MegaScraper:
             logger.error("Failed to click submit button")
             return False
 
-            # Wait for login completion
-            try:
-                # Check for success or failure indicators
-                success = False
-                
-                if success_indicator:
-                    success_element = self.wait_for_element(
-                        success_indicator["type"],
-                        success_indicator["value"],
-                        timeout=30
-                    )
-                    if success_element:
-                        logger.info("Login successful - success indicator found")
-                        success = True
-                else:
-                    # If no success indicator provided, check URL change
-                    current_url = self.driver.current_url
-                    if current_url != login_url:
-                        logger.info("Login likely successful - URL changed")
-                        success = True
+        # Wait for login completion
+        try:
+            # Check for success or failure indicators
+            success = False
+            
+            if success_indicator:
+                success_element = self.wait_for_element(
+                    success_indicator["type"],
+                    success_indicator["value"],
+                    timeout=30
+                )
+                if success_element:
+                    logger.info("Login successful - success indicator found")
+                    success = True
+            else:
+                # If no success indicator provided, check URL change
+                current_url = self.driver.current_url
+                if current_url != login_url:
+                    logger.info("Login likely successful - URL changed")
+                    success = True
 
-                # Check for failure indicator even if success was detected
-                if failure_indicator:
-                    failure_element = self.wait_for_element(
-                        failure_indicator["type"],
-                        failure_indicator["value"],
-                        timeout=5
-                    )
-                    if failure_element:
-                        logger.error("Login failed - failure indicator present")
-                        success = False
-
-                # Final verification through cookies
-                if success and not any('session' in k.lower() for k in self.session_cookies):
-                    logger.warning("No session cookies detected after login")
+            # Check for failure indicator even if success was detected
+            if failure_indicator:
+                failure_element = self.wait_for_element(
+                    failure_indicator["type"],
+                    failure_indicator["value"],
+                    timeout=5
+                )
+                if failure_element:
+                    logger.error("Login failed - failure indicator present")
                     success = False
 
-                self._update_session_cookies()
-                return success
+            # Final verification through cookies
+            if success and not any('session' in k.lower() for k in self.session_cookies):
+                logger.warning("No session cookies detected after login")
+                success = False
 
-            except Exception as e:
-                logger.error(f"Login verification failed: {str(e)}")
-                return False
+            self._update_session_cookies()
+            return success
+
+        except Exception as e:
+            logger.error(f"Login verification failed: {str(e)}")
+            return False
+        
+    def check_robots_txt(self, url: str):
+        """Automated robots.txt compliance"""
+        from urllib.robotparser import RobotFileParser
+        rp = RobotFileParser()
+        rp.set_url(urlparse(url).scheme + "://" + urlparse(url).netloc + "/robots.txt")
+        rp.read()
+        return rp.can_fetch(self.user_agent, url)
+    
+    def take_screenshot(self, element: WebElement = None):
+        """Enhanced visual debugging"""
+        if element:
+            self.driver.execute_script("arguments[0].scrollIntoView();", element)
+            element.screenshot("element.png")
+        else:
+            self.driver.save_screenshot("fullpage.png")
+
+    def download_file(self, element: WebElement, save_path: str):
+        """Handle file downloads"""
+        url = element.get_attribute("href")
+        headers = {"User-Agent": self.user_agent}
+        response = requests.get(url, headers=headers, stream=True)
+        with open(save_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+    def add_middleware(self, middleware_type: str, callback: callable):
+        """Plugin system for custom processing"""
+        self.middleware.setdefault(middleware_type, []).append(callback)
+
+    def _run_middleware(self, middleware_type: str, data: Any):
+        """Execute middleware pipeline"""
+        for middleware in self.middleware.get(middleware_type, []):
+            data = middleware(data)
+        return data
+
+    def execute_ajax_request(self, script: str):
+        """Direct AJAX handling"""
+        return self.driver.execute_async_script(f"""
+            var callback = arguments[arguments.length - 1];
+            {script}.then(callback).catch(callback);
+        """)
+
+    def switch_to_iframe(self, identifier: Union[str, WebElement]):
+        """Enhanced iframe handling"""
+        self.wait.until(EC.frame_to_be_available_and_switch_to_it(identifier))
 
     def close_browser(self) -> None:
         """Close the browser instance and cleanup resources."""
@@ -911,35 +960,3 @@ class MegaScraper:
     def __del__(self):
         """Destructor to ensure browser is closed on object deletion."""
         self.close_browser()
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="MegaScraper - Advanced Web Scraping Tool")
-    parser.add_argument("url", help="Target URL to scrape")
-    parser.add_argument("-o", "--output", help="Output file name", default="output")
-    parser.add_argument("-f", "--format", help="Output format (json, csv, excel)", default="json")
-    parser.add_argument("--headless", action="store_true", help="Run in headless mode")
-    parser.add_argument("--proxy", help="Proxy server (ip:port)")
-    args = parser.parse_args()
-
-    scraper = MegaScraper(headless=args.headless, proxy=args.proxy)
-    try:
-        if scraper.navigate_to(args.url):
-            # Example extraction configuration
-            extraction_config = {
-                "title": {
-                    "type": "tag",
-                    "value": "h1",
-                    "attribute": "text"
-                },
-                "links": {
-                    "type": "tag",
-                    "value": "a",
-                    "attribute": "href",
-                    "multiple": True
-                }
-            }
-            data = scraper.extract_data(extraction_config)
-            scraper.save_data(data, format=args.format, filename=args.output)
-    finally:
-        scraper.close_browser()
-        
