@@ -2,7 +2,6 @@ import time
 import json
 import random
 import logging
-import argparse
 from typing import Dict, List, Optional, Union, Any
 import csv
 import os
@@ -679,18 +678,18 @@ class MegaScraper:
     
     def infinite_scroll(
         self, 
-        scroll_pause_time: float = 1.0,
-        max_scrolls: int = 10,
+        max_scroll_time: float = 60.0,
+        max_no_change_count: int = 10,
         extraction_config: Optional[Dict[str, Any]] = None,
         stop_condition: Optional[Dict[str, str]] = None
     ) -> List[Dict[str, Any]]:
         """
-        Handle infinite scrolling pages and optionally extract data.
+        Handle infinite scrolling pages with natural human-like scrolling behavior.
         
         Args:
-            scroll_pause_time: Time to pause between scrolls
-            max_scrolls: Maximum number of scrolls to perform
-            extraction_config: Optional config for data extraction after each scroll
+            max_scroll_time: Maximum time in seconds to scroll
+            max_no_change_count: Number of consecutive scrolls with no height change before assuming end
+            extraction_config: Optional config for data extraction during scrolling
             stop_condition: Optional dictionary with "type" and "value" for element that
                             indicates the end of scrolling
                             
@@ -703,18 +702,15 @@ class MegaScraper:
             return []
             
         all_results = []
-        last_height = self.driver.execute_script("return document.body.scrollHeight")
+        start_time = time.time()
+        previous_height = self.driver.execute_script("return document.body.scrollHeight")
+        no_change_count = 0
         
-        for scroll_num in range(max_scrolls):
-            logger.info(f"Scroll {scroll_num + 1}/{max_scrolls}")
-            
-            # Scroll down
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(scroll_pause_time)
-            
-            # Check if we've reached the end of the page by height
-            new_height = self.driver.execute_script("return document.body.scrollHeight")
-            
+        # Current position
+        current_position = 0
+        
+        # Keep scrolling until timeout or we've determined we've reached the bottom
+        while time.time() - start_time < max_scroll_time and no_change_count < max_no_change_count:
             # Extract data if config is provided
             if extraction_config:
                 page_data = self.extract_data(extraction_config)
@@ -733,15 +729,56 @@ class MegaScraper:
                 except NoSuchElementException:
                     pass  # Stop element not found, continue scrolling
             
-            # If we've reached the bottom of the page, break
-            if new_height == last_height:
-                logger.info("Reached the bottom of the page. No more content to load.")
-                break
+            # Get current height of page
+            total_height = self.driver.execute_script("return document.body.scrollHeight")
+            
+            # Random scroll amount between 300 and 700 pixels
+            scroll_amount = random.randint(300, 700)
+            
+            # Update position, but don't exceed current total height
+            current_position = min(current_position + scroll_amount, total_height - 800)
+            
+            # Scroll to the new position with smooth behavior
+            self.driver.execute_script(f"window.scrollTo({{top: {current_position}, behavior: 'smooth'}});")
+            
+            # Random pause between 0.5 and 2 seconds
+            pause_time = random.uniform(0.5, 2.0)
+            time.sleep(pause_time)
+            
+            # Small chance to pause for longer (simulating reading)
+            if random.random() < 0.2:  # 20% chance
+                time.sleep(random.uniform(1.5, 4.0))
+            
+            # Check if page height has changed (new content loaded)
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            if new_height == previous_height:
+                no_change_count += 1
+                logger.debug(f"No new content detected (count: {no_change_count}/{max_no_change_count})")
+            else:
+                no_change_count = 0
+                previous_height = new_height
+                logger.debug("New content detected, resetting no-change counter")
                 
-            last_height = new_height
+            # Add some randomness to occasionally scroll back up slightly
+            if random.random() < 0.1:  # 10% chance
+                upscroll_amount = random.randint(100, 300)
+                current_position = max(0, current_position - upscroll_amount)
+                self.driver.execute_script(f"window.scrollTo({{top: {current_position}, behavior: 'smooth'}});")
+                time.sleep(random.uniform(0.3, 1.0))
+                logger.debug(f"Scrolled back up {upscroll_amount}px")
+
+        # Record if we reached the end or timed out
+        if no_change_count >= max_no_change_count:
+            logger.info("Reached the end of the page (no new content loading)")
+        else:
+            logger.info(f"Scrolling stopped after {max_scroll_time} seconds")
+            
+        # Optionally scroll back to top
+        self.driver.execute_script("window.scrollTo({top: 0, behavior: 'smooth'});")
+        time.sleep(1)
         
         return all_results
-    
+
     def handle_login(
         self, 
         login_url: str,
