@@ -1,6 +1,7 @@
 # Complete MySQL Tutorial: A to Z Guide
 
 ## Table of Contents
+
 1. [Installation & Setup](#installation--setup)
 2. [Getting Started](#getting-started)
 3. [User Management](#user-management)
@@ -25,6 +26,7 @@
 ## 1. Installation & Setup
 
 ### Ubuntu/Debian Installation
+
 ```bash
 # Update package list
 sudo apt update
@@ -46,6 +48,7 @@ sudo systemctl status mysql
 ```
 
 ### CentOS/RHEL/Fedora Installation
+
 ```bash
 # Install MySQL
 sudo yum install mysql-server
@@ -64,6 +67,7 @@ sudo mysql_secure_installation
 ```
 
 ### macOS Installation
+
 ```bash
 # Using Homebrew
 brew install mysql
@@ -76,6 +80,7 @@ mysql_secure_installation
 ```
 
 ### Windows Installation
+
 1. Download MySQL Installer from mysql.com
 2. Run the installer
 3. Choose "Server only" or "Full" installation
@@ -87,6 +92,7 @@ mysql_secure_installation
 ## 2. Getting Started
 
 ### Connecting to MySQL
+
 ```bash
 # Connect as root
 mysql -u root -p
@@ -110,6 +116,7 @@ EXIT;
 ```
 
 ### Basic Commands
+
 ```sql
 -- Show MySQL version
 SELECT VERSION();
@@ -143,6 +150,7 @@ HELP;
 ## 3. User Management
 
 ### Creating Users
+
 ```sql
 -- Create new user
 CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
@@ -155,6 +163,7 @@ CREATE USER 'username'@'192.168.1.100' IDENTIFIED BY 'password';
 ```
 
 ### Granting Privileges
+
 ```sql
 -- Grant all privileges on all databases
 GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';
@@ -173,6 +182,7 @@ FLUSH PRIVILEGES;
 ```
 
 ### Viewing Privileges
+
 ```sql
 -- Show privileges for current user
 SHOW GRANTS;
@@ -185,6 +195,7 @@ SELECT User, Host FROM mysql.user;
 ```
 
 ### Modifying Users
+
 ```sql
 -- Change password
 ALTER USER 'username'@'localhost' IDENTIFIED BY 'new_password';
@@ -204,6 +215,7 @@ DROP USER 'username'@'localhost';
 ## 4. Database Basics
 
 ### Creating Databases
+
 ```sql
 -- Create database
 CREATE DATABASE database_name;
@@ -216,6 +228,7 @@ CREATE DATABASE IF NOT EXISTS database_name;
 ```
 
 ### Using Databases
+
 ```sql
 -- Use database
 USE database_name;
@@ -228,12 +241,13 @@ SHOW DATABASES;
 ```
 
 ### Database Information
+
 ```sql
 -- Show database creation statement
 SHOW CREATE DATABASE database_name;
 
 -- Show database size
-SELECT 
+SELECT
     table_schema AS 'Database',
     ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)'
 FROM information_schema.tables
@@ -241,6 +255,7 @@ WHERE table_schema = 'database_name';
 ```
 
 ### Dropping Databases
+
 ```sql
 -- Drop database
 DROP DATABASE database_name;
@@ -254,6 +269,7 @@ DROP DATABASE IF EXISTS database_name;
 ## 5. Table Operations
 
 ### Creating Tables
+
 ```sql
 -- Basic table creation
 CREATE TABLE table_name (
@@ -275,6 +291,7 @@ CREATE TABLE students (
 ```
 
 ### Table Information
+
 ```sql
 -- Show tables in database
 SHOW TABLES;
@@ -292,6 +309,7 @@ SHOW TABLE STATUS LIKE 'table_name';
 ```
 
 ### Modifying Tables
+
 ```sql
 -- Add column
 ALTER TABLE table_name ADD COLUMN column_name datatype;
@@ -316,6 +334,7 @@ RENAME TABLE old_table_name TO new_table_name;
 ```
 
 ### Dropping Tables
+
 ```sql
 -- Drop table
 DROP TABLE table_name;
@@ -335,6 +354,7 @@ TRUNCATE TABLE table_name;
 ## 6. Data Types
 
 ### Numeric Types
+
 ```sql
 -- Integer types
 TINYINT     -- 1 byte (-128 to 127)
@@ -357,6 +377,7 @@ temperature FLOAT(5,2)     -- 999.99
 ```
 
 ### String Types
+
 ```sql
 -- Fixed length
 CHAR(length)               -- Fixed length string
@@ -379,6 +400,7 @@ profile_picture BLOB
 ```
 
 ### Date and Time Types
+
 ```sql
 DATE                       -- YYYY-MM-DD
 TIME                       -- HH:MM:SS
@@ -393,6 +415,7 @@ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ```
 
 ### Other Types
+
 ```sql
 -- Boolean (stored as TINYINT)
 BOOLEAN                    -- TRUE/FALSE
@@ -418,6 +441,7 @@ metadata JSON
 ## 7. CRUD Operations
 
 ### CREATE (Insert Data)
+
 ```sql
 -- Insert single row
 INSERT INTO table_name (column1, column2, column3)
@@ -425,7 +449,7 @@ VALUES (value1, value2, value3);
 
 -- Insert multiple rows
 INSERT INTO table_name (column1, column2, column3)
-VALUES 
+VALUES
     (value1, value2, value3),
     (value4, value5, value6),
     (value7, value8, value9);
@@ -444,12 +468,13 @@ INSERT IGNORE INTO table_name (columns) VALUES (values);
 -- Insert or update on duplicate
 INSERT INTO table_name (id, name, email)
 VALUES (1, 'John', 'john@email.com')
-ON DUPLICATE KEY UPDATE 
+ON DUPLICATE KEY UPDATE
     name = VALUES(name),
     email = VALUES(email);
 ```
 
 ### READ (Select Data)
+
 ```sql
 -- Select all columns
 SELECT * FROM table_name;
@@ -475,13 +500,14 @@ SELECT * FROM students WHERE major IN ('Computer Science', 'Mathematics');
 ```
 
 ### UPDATE (Modify Data)
+
 ```sql
 -- Update single column
 UPDATE table_name SET column1 = value1 WHERE condition;
 
 -- Update multiple columns
-UPDATE table_name 
-SET column1 = value1, column2 = value2 
+UPDATE table_name
+SET column1 = value1, column2 = value2
 WHERE condition;
 
 -- Update with calculation
@@ -498,6 +524,7 @@ UPDATE table_name SET column1 = value1;
 ```
 
 ### DELETE (Remove Data)
+
 ```sql
 -- Delete specific rows
 DELETE FROM table_name WHERE condition;
@@ -519,6 +546,7 @@ TRUNCATE TABLE table_name;
 ## 8. Queries & Filtering
 
 ### WHERE Clause
+
 ```sql
 -- Comparison operators
 SELECT * FROM students WHERE age = 20;
@@ -551,6 +579,7 @@ SELECT * FROM students WHERE phone IS NOT NULL;
 ```
 
 ### ORDER BY
+
 ```sql
 -- Sort ascending (default)
 SELECT * FROM students ORDER BY last_name;
@@ -567,6 +596,7 @@ SELECT first_name, last_name, gpa FROM students ORDER BY 3 DESC;
 ```
 
 ### GROUP BY and HAVING
+
 ```sql
 -- Group by single column
 SELECT major, COUNT(*) as student_count
@@ -597,6 +627,7 @@ ORDER BY avg_gpa DESC;
 ```
 
 ### LIMIT and OFFSET
+
 ```sql
 -- Limit results
 SELECT * FROM students LIMIT 10;
@@ -611,6 +642,7 @@ SELECT * FROM students LIMIT 20, 10;        -- MySQL syntax (offset, limit)
 ## 9. Joins
 
 ### Sample Tables for Join Examples
+
 ```sql
 -- Students table
 CREATE TABLE students (
@@ -635,6 +667,7 @@ CREATE TABLE enrollments (
 ```
 
 ### INNER JOIN
+
 ```sql
 -- Basic inner join
 SELECT s.name, m.major_name
@@ -649,6 +682,7 @@ INNER JOIN enrollments e ON s.student_id = e.student_id;
 ```
 
 ### LEFT JOIN (LEFT OUTER JOIN)
+
 ```sql
 -- Include all students, even without majors
 SELECT s.name, m.major_name
@@ -663,6 +697,7 @@ WHERE m.major_id IS NULL;
 ```
 
 ### RIGHT JOIN (RIGHT OUTER JOIN)
+
 ```sql
 -- Include all majors, even without students
 SELECT s.name, m.major_name
@@ -671,6 +706,7 @@ RIGHT JOIN majors m ON s.major_id = m.major_id;
 ```
 
 ### FULL OUTER JOIN (MySQL doesn't support directly)
+
 ```sql
 -- Simulate full outer join with UNION
 SELECT s.name, m.major_name
@@ -683,6 +719,7 @@ RIGHT JOIN majors m ON s.major_id = m.major_id;
 ```
 
 ### CROSS JOIN
+
 ```sql
 -- Cartesian product (every combination)
 SELECT s.name, m.major_name
@@ -691,6 +728,7 @@ CROSS JOIN majors m;
 ```
 
 ### SELF JOIN
+
 ```sql
 -- Employees table with manager relationship
 SELECT e1.name as employee, e2.name as manager
@@ -703,6 +741,7 @@ LEFT JOIN employees e2 ON e1.manager_id = e2.employee_id;
 ## 10. Functions & Operators
 
 ### Aggregate Functions
+
 ```sql
 -- Count
 SELECT COUNT(*) FROM students;                    -- Count all rows
@@ -720,6 +759,7 @@ SELECT GROUP_CONCAT(name SEPARATOR '; ') FROM students;
 ```
 
 ### String Functions
+
 ```sql
 -- String manipulation
 SELECT CONCAT(first_name, ' ', last_name) as full_name FROM students;
@@ -746,6 +786,7 @@ SELECT * FROM students WHERE name SOUNDS LIKE 'John';
 ```
 
 ### Numeric Functions
+
 ```sql
 -- Mathematical functions
 SELECT ABS(-5), CEIL(4.3), FLOOR(4.7), ROUND(4.567, 2);
@@ -756,6 +797,7 @@ SELECT RAND(), ROUND(RAND() * 100);
 ```
 
 ### Date and Time Functions
+
 ```sql
 -- Current date and time
 SELECT NOW(), CURDATE(), CURTIME();
@@ -775,19 +817,20 @@ SELECT YEAR(birth_date), MONTH(birth_date), DAY(birth_date) FROM students;
 SELECT DAYNAME(birth_date), MONTHNAME(birth_date) FROM students;
 
 -- Age calculation
-SELECT name, birth_date, 
-       TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) as age 
+SELECT name, birth_date,
+       TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) as age
 FROM students;
 ```
 
 ### Conditional Functions
+
 ```sql
 -- IF function
 SELECT name, IF(gpa >= 3.5, 'Honor', 'Regular') as status FROM students;
 
 -- CASE statement
 SELECT name, gpa,
-    CASE 
+    CASE
         WHEN gpa >= 3.8 THEN 'Excellent'
         WHEN gpa >= 3.5 THEN 'Good'
         WHEN gpa >= 3.0 THEN 'Average'
@@ -807,6 +850,7 @@ SELECT NULLIF(gpa, 0) FROM students;
 ## 11. Constraints & Keys
 
 ### Primary Key
+
 ```sql
 -- Single column primary key
 CREATE TABLE students (
@@ -830,6 +874,7 @@ ALTER TABLE table_name DROP PRIMARY KEY;
 ```
 
 ### Foreign Key
+
 ```sql
 -- Foreign key in CREATE TABLE
 CREATE TABLE enrollments (
@@ -850,8 +895,8 @@ CREATE TABLE enrollments (
 );
 
 -- Add foreign key to existing table
-ALTER TABLE enrollments 
-ADD CONSTRAINT fk_student 
+ALTER TABLE enrollments
+ADD CONSTRAINT fk_student
 FOREIGN KEY (student_id) REFERENCES students(student_id);
 
 -- Drop foreign key
@@ -859,6 +904,7 @@ ALTER TABLE enrollments DROP FOREIGN KEY fk_student;
 ```
 
 ### UNIQUE Constraint
+
 ```sql
 -- Unique constraint in CREATE TABLE
 CREATE TABLE students (
@@ -885,6 +931,7 @@ ALTER TABLE students DROP INDEX email;
 ```
 
 ### NOT NULL Constraint
+
 ```sql
 -- NOT NULL in CREATE TABLE
 CREATE TABLE students (
@@ -902,6 +949,7 @@ ALTER TABLE students MODIFY COLUMN phone VARCHAR(15);
 ```
 
 ### CHECK Constraint (MySQL 8.0+)
+
 ```sql
 -- CHECK constraint in CREATE TABLE
 CREATE TABLE students (
@@ -919,6 +967,7 @@ ALTER TABLE students DROP CHECK chk_age;
 ```
 
 ### DEFAULT Values
+
 ```sql
 -- DEFAULT in CREATE TABLE
 CREATE TABLE students (
@@ -941,6 +990,7 @@ ALTER TABLE students ALTER COLUMN status DROP DEFAULT;
 ## 12. Indexes
 
 ### Creating Indexes
+
 ```sql
 -- Simple index
 CREATE INDEX idx_lastname ON students (last_name);
@@ -959,6 +1009,7 @@ CREATE INDEX idx_upper_name ON students ((UPPER(last_name)));
 ```
 
 ### Viewing Indexes
+
 ```sql
 -- Show indexes for a table
 SHOW INDEX FROM table_name;
@@ -967,11 +1018,12 @@ SHOW INDEX FROM table_name;
 SHOW INDEX FROM students WHERE Key_name = 'idx_lastname';
 
 -- Index information from information_schema
-SELECT * FROM information_schema.statistics 
+SELECT * FROM information_schema.statistics
 WHERE table_name = 'students';
 ```
 
 ### Dropping Indexes
+
 ```sql
 -- Drop index
 DROP INDEX idx_lastname ON students;
@@ -981,6 +1033,7 @@ ALTER TABLE students DROP INDEX idx_lastname;
 ```
 
 ### Index Types
+
 ```sql
 -- B-Tree index (default)
 CREATE INDEX idx_name ON students (name) USING BTREE;
@@ -996,6 +1049,7 @@ CREATE SPATIAL INDEX idx_location ON places (coordinates);
 ```
 
 ### Query Optimization with Indexes
+
 ```sql
 -- Use EXPLAIN to see query execution plan
 EXPLAIN SELECT * FROM students WHERE last_name = 'Smith';
@@ -1012,6 +1066,7 @@ SELECT * FROM students IGNORE INDEX (idx_lastname) WHERE last_name = 'Smith';
 ## 13. Views
 
 ### Creating Views
+
 ```sql
 -- Simple view
 CREATE VIEW active_students AS
@@ -1021,7 +1076,7 @@ WHERE status = 'active';
 
 -- Complex view with joins
 CREATE VIEW student_courses AS
-SELECT 
+SELECT
     s.student_id,
     CONCAT(s.first_name, ' ', s.last_name) as student_name,
     c.course_name,
@@ -1032,7 +1087,7 @@ JOIN courses c ON e.course_id = c.course_id;
 
 -- View with aggregation
 CREATE VIEW student_stats AS
-SELECT 
+SELECT
     major,
     COUNT(*) as student_count,
     AVG(gpa) as average_gpa,
@@ -1042,6 +1097,7 @@ GROUP BY major;
 ```
 
 ### Using Views
+
 ```sql
 -- Query view like a table
 SELECT * FROM active_students;
@@ -1054,6 +1110,7 @@ JOIN student_stats ss ON s.major = ss.major;
 ```
 
 ### Managing Views
+
 ```sql
 -- Show views
 SHOW TABLES;  -- Views appear with tables
@@ -1074,6 +1131,7 @@ DROP VIEW IF EXISTS view_name;
 ```
 
 ### Updatable Views
+
 ```sql
 -- Simple updatable view
 CREATE VIEW active_students AS
@@ -1086,7 +1144,7 @@ WITH CHECK OPTION;
 UPDATE active_students SET email = 'new@email.com' WHERE student_id = 1;
 
 -- Insert through view
-INSERT INTO active_students (first_name, last_name, email) 
+INSERT INTO active_students (first_name, last_name, email)
 VALUES ('John', 'Doe', 'john@email.com');
 ```
 
@@ -1095,6 +1153,7 @@ VALUES ('John', 'Doe', 'john@email.com');
 ## 14. Stored Procedures
 
 ### Creating Stored Procedures
+
 ```sql
 -- Change delimiter for procedure definition
 DELIMITER //
@@ -1118,9 +1177,9 @@ CREATE PROCEDURE GetStudentStats(
     OUT avg_gpa DECIMAL(3,2)
 )
 BEGIN
-    SELECT COUNT(*), AVG(gpa) 
+    SELECT COUNT(*), AVG(gpa)
     INTO student_count, avg_gpa
-    FROM students 
+    FROM students
     WHERE major = major_name;
 END //
 
@@ -1129,6 +1188,7 @@ DELIMITER ;
 ```
 
 ### Calling Stored Procedures
+
 ```sql
 -- Call simple procedure
 CALL GetStudentCount();
@@ -1142,6 +1202,7 @@ SELECT @count, @avg_gpa;
 ```
 
 ### Advanced Stored Procedures
+
 ```sql
 DELIMITER //
 
@@ -1152,17 +1213,17 @@ CREATE PROCEDURE UpdateStudentGPA(
 BEGIN
     DECLARE done INT DEFAULT FALSE;
     DECLARE old_gpa DECIMAL(3,2);
-    
+
     -- Get current GPA
     SELECT gpa INTO old_gpa FROM students WHERE id = student_id;
-    
+
     -- Update GPA
     UPDATE students SET gpa = new_gpa WHERE id = student_id;
-    
+
     -- Log the change
     INSERT INTO gpa_history (student_id, old_gpa, new_gpa, change_date)
     VALUES (student_id, old_gpa, new_gpa, NOW());
-    
+
     SELECT 'GPA updated successfully' as message;
 END //
 
@@ -1170,6 +1231,7 @@ DELIMITER ;
 ```
 
 ### Managing Stored Procedures
+
 ```sql
 -- Show procedures
 SHOW PROCEDURE STATUS;
@@ -1188,6 +1250,7 @@ DROP PROCEDURE IF EXISTS procedure_name;
 ## 15. Triggers
 
 ### Creating Triggers
+
 ```sql
 -- BEFORE INSERT trigger
 DELIMITER //
@@ -1200,7 +1263,7 @@ BEGIN
     IF NEW.enrollment_date IS NULL THEN
         SET NEW.enrollment_date = CURDATE();
     END IF;
-    
+
     -- Validate email format
     IF NEW.email NOT LIKE '%@%.%' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid email format';
@@ -1219,7 +1282,7 @@ BEGIN
     -- Log new student enrollment
     INSERT INTO audit_log (table_name, operation, record_id, timestamp)
     VALUES ('students', 'INSERT', NEW.student_id, NOW());
-    
+
     -- Send welcome email (placeholder)
     INSERT INTO email_queue (recipient, subject, body)
     VALUES (NEW.email, 'Welcome!', CONCAT('Welcome ', NEW.first_name, ' to our university!'));
@@ -1238,7 +1301,7 @@ BEGIN
     IF NEW.gpa < 0 THEN
         SET NEW.gpa = 0;
     END IF;
-    
+
     -- Update modified timestamp
     SET NEW.updated_at = NOW();
 END //
@@ -1254,17 +1317,17 @@ FOR EACH ROW
 BEGIN
     -- Log changes to audit table
     INSERT INTO student_audit (
-        student_id, 
-        old_gpa, 
-        new_gpa, 
-        changed_by, 
+        student_id,
+        old_gpa,
+        new_gpa,
+        changed_by,
         change_date
     )
     VALUES (
-        NEW.student_id, 
-        OLD.gpa, 
-        NEW.gpa, 
-        USER(), 
+        NEW.student_id,
+        OLD.gpa,
+        NEW.gpa,
+        USER(),
         NOW()
     );
 END //
@@ -1291,6 +1354,7 @@ DELIMITER ;
 ```
 
 ### Managing Triggers
+
 ```sql
 -- Show triggers
 SHOW TRIGGERS;
@@ -1313,6 +1377,7 @@ DROP TRIGGER IF EXISTS trigger_name;
 ## 16. Backup & Restore
 
 ### mysqldump - Database Backup
+
 ```bash
 # Backup single database
 mysqldump -u username -p database_name > backup.sql
@@ -1345,6 +1410,7 @@ mysqldump -u username -p \
 ```
 
 ### Restore Database
+
 ```bash
 # Restore database
 mysql -u username -p database_name < backup.sql
@@ -1361,6 +1427,7 @@ mysql -u username -p new_database < backup.sql
 ```
 
 ### Binary Log Backup (Point-in-time Recovery)
+
 ```sql
 -- Enable binary logging (add to my.cnf)
 -- log-bin=mysql-bin
@@ -1387,6 +1454,7 @@ mysqlbinlog --start-datetime="2024-01-01 10:00:00" \
 ```
 
 ### Automated Backup Script
+
 ```bash
 #!/bin/bash
 # backup_script.sh
@@ -1422,6 +1490,7 @@ echo "Backup completed: ${DB_NAME}_${DATE}.sql.gz"
 ## 17. Performance Optimization
 
 ### Query Optimization
+
 ```sql
 -- Use EXPLAIN to analyze queries
 EXPLAIN SELECT * FROM students WHERE last_name = 'Smith';
@@ -1456,6 +1525,7 @@ WHERE s.gpa > 3.0;
 ```
 
 ### Database Configuration
+
 ```sql
 -- Check current configuration
 SHOW VARIABLES LIKE 'innodb%';
@@ -1471,6 +1541,7 @@ SHOW VARIABLES LIKE 'key_buffer_size';
 ```
 
 ### Monitoring and Analysis
+
 ```sql
 -- Show processlist (active queries)
 SHOW PROCESSLIST;
@@ -1502,6 +1573,7 @@ OPTIMIZE TABLE students;
 ```
 
 ### Performance Best Practices
+
 ```sql
 -- 1. Use appropriate data types
 -- Bad: VARCHAR(255) for short strings
@@ -1544,6 +1616,7 @@ CHECK TABLE students;
 ## 18. MySQL Workbench
 
 ### Connection Setup
+
 ```
 1. Open MySQL Workbench
 2. Click "+" next to "MySQL Connections"
@@ -1561,6 +1634,7 @@ CHECK TABLE students;
 ### Workbench Features
 
 #### Database Administration
+
 ```sql
 -- Server Status Dashboard
 -- Shows server performance metrics
@@ -1580,6 +1654,7 @@ CHECK TABLE students;
 ```
 
 #### SQL Development
+
 ```sql
 -- Query Editor
 -- Syntax highlighting
@@ -1599,6 +1674,7 @@ CHECK TABLE students;
 ```
 
 #### Database Design
+
 ```sql
 -- EER (Enhanced Entity-Relationship) Diagrams
 -- Visual database design
@@ -1619,6 +1695,7 @@ CHECK TABLE students;
 ```
 
 #### Useful Workbench Shortcuts
+
 ```
 Ctrl+T          - New query tab
 Ctrl+Enter      - Execute query
@@ -1635,6 +1712,7 @@ Ctrl+D          - Duplicate line
 ## Quick Reference Commands
 
 ### Connection & Database
+
 ```sql
 -- Connect
 mysql -u username -p
@@ -1647,6 +1725,7 @@ DROP DATABASE db_name;
 ```
 
 ### Table Operations
+
 ```sql
 -- Show and describe
 SHOW TABLES;
@@ -1666,6 +1745,7 @@ ALTER TABLE table_name MODIFY COLUMN col_name VARCHAR(100);
 ```
 
 ### Data Operations
+
 ```sql
 -- Insert
 INSERT INTO table_name (col1, col2) VALUES (val1, val2);
@@ -1682,6 +1762,7 @@ DELETE FROM table_name WHERE condition;
 ```
 
 ### Common Functions
+
 ```sql
 -- Aggregate
 COUNT(*), SUM(col), AVG(col), MIN(col), MAX(col)
@@ -1702,6 +1783,7 @@ CASE WHEN condition THEN result END
 ## Troubleshooting Common Issues
 
 ### Connection Issues
+
 ```bash
 # Check if MySQL is running
 sudo systemctl status mysql
@@ -1717,6 +1799,7 @@ sudo mysql_secure_installation
 ```
 
 ### Permission Issues
+
 ```sql
 -- Check current user privileges
 SHOW GRANTS;
@@ -1727,6 +1810,7 @@ FLUSH PRIVILEGES;
 ```
 
 ### Performance Issues
+
 ```sql
 -- Check slow queries
 SHOW PROCESSLIST;
@@ -1739,6 +1823,7 @@ SHOW TABLE STATUS;
 ```
 
 ### Data Issues
+
 ```sql
 -- Check table for errors
 CHECK TABLE table_name;
